@@ -1,0 +1,40 @@
+Meeting: Web Compatibility Meeting
+Date: 21 March 2017 - 6:00 PDT
+Minutes: https://example.org/meetings/2017-03-21
+Scribe: Aminata
+
+Some intro prose.
+On one or more line
+
+# Walden (Henry David Thoreau)
+Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores. Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world.
+henry: To be awake is to be alive.
+david: I have always been regretting that I was not as wise as the day I was born.
+
+# A Moveable Feast (Hemingway)
+Then there was the bad weather. It would come in one day when the fall was over.
+ernest: We would have to shut the windows in the night against the rain and the cold wind would strip the leaves from the trees in the Place Contrescarpe. https://en.wikipedia.org/wiki/Ernest_Hemingway
+hemingway: The leaves lay sodden in the rain and the wind drove the rain against the big green autobus at the terminal and the Café des Amateurs was crowded and the windows misted over from the heat and the smoke inside.
+
+
+===========AGENDA ITEMS ABOVE THIS LINE===========
+
+1. No agenda, no meeting.
+2. Add an agenda item above by using this format below.
+   Provide links when referring to previous discussions:
+
+## short topic (irc_name)
+Short description
+
+==================================================
+logistics:
+* Meeting on vidyo
+* 1st Tuesday meeting of the month is for webcompat.com
+* 3rd Thursday of the month is Europe time-zone friendly
+* http://timesched.pocoo.org/?date=2017-04-04&tz=us:san-francisco:ca,us:austin:tx!,ca:toronto,utc,gb:london,fr:paris,tw:taipei,jp:tokyo,nz:auckland&range=780,840
+* You can also find us at #webcompat on irc.mozilla.org
+==================================================
+python script to generate the minutes
+https://github.com/karlcow/webcompat/tree/master/moz/minutes
+Once the minutes are generated, add them to
+https://wiki.mozilla.org/Compatibility/Meetings
