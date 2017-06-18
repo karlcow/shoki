@@ -17,6 +17,8 @@ FIXTURE_DIR = './tests/fixtures/'
 class TestShokiParsing(unittest.TestCase):
     def setUp(self):
         self.minutes = self.read_minutes('minutes_normal.txt')
+        self.headers = meta_headers(self.minutes)
+        self.meta_date = self.headers['date']
 
     def tearDown(self):
         pass
@@ -29,7 +31,7 @@ class TestShokiParsing(unittest.TestCase):
 
     def test_meeting_date(self):
         """Extracts the meeting date."""
-        actual = meeting_date(self.minutes)
+        actual = meeting_date(self.meta_date)
         expected = '2017-03-21'
         self.assertEqual(actual, expected)
 
