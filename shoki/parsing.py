@@ -9,6 +9,25 @@
 import re
 
 
+def meta_headers(text_minutes):
+    """Extract the metadata section of a meeting.
+
+    - simple format of Key: Value.
+    - Ends with a blank line.
+    - Returns a dictionary.
+    """
+    meta = {}
+    for line in text_minutes.split('\n'):
+        if line.strip() == '':
+            break
+        meta_key, meta_value = line.split(':', 1)
+        meta[meta_key.strip().lower()] = meta_value.strip()
+    return meta
+
+
+
+
+
 def meeting_date(text_minutes):
     """Extract the meeting date.
 
