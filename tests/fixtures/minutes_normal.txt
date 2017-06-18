@@ -1,4 +1,4 @@
-Meeting: Web Compatibility Meeting
+Meeting: Web Compatibility
 Date: 21 March 2017 - 6:00 PDT
 Minutes: https://example.org/meetings/2017-03-21
 Scribe: Aminata
