@@ -19,6 +19,7 @@ FIXTURE_DIR = './tests/fixtures/'
 class TestShokiParsing(unittest.TestCase):
     def setUp(self):
         self.minutes = self.read_minutes('minutes_normal.txt')
+        self.minutes_basic = self.read_minutes('minutes_normal_no_cruft.txt')
         self.headers = meta_headers(self.minutes)
         self.meta_date = self.headers['date']
 
@@ -49,15 +50,32 @@ class TestShokiParsing(unittest.TestCase):
 
     def test_topic_owner(self):
         """Extracts the topic and owner of a discussion."""
-        minutes_block = extract_blocks[self.minutes]
-        actual = extract_topic(minutes_block[0])
+        actual = extract_topic('# Walden (Henry David Thoreau) ')
         expected = {'topic': 'Walden', 'owner': 'Henry David Thoreau'}
         self.assertIs(type(actual), dict)
         self.assertDictEqual(actual, expected)
-        actual2 = extract_topic(minutes_block[2])
-        expected2 = {'topic': 'Topic without owner', 'owner': None}
+        actual2 = extract_topic('# topic without owner')
+        expected2 = {'topic': 'topic without owner', 'owner': None}
         self.assertIs(type(actual2), dict)
         self.assertDictEqual(actual2, expected2)
+        actual3 = extract_topic('#topic and spaces(owner)')
+        expected3 = {'topic': 'topic and spaces', 'owner': 'owner'}
+        self.assertIs(type(actual3), dict)
+        self.assertDictEqual(actual3, expected3)
+
+    def test_minutes_blocks(self):
+        """Extract minutes into blocks."""
+        actual = extract_blocks(self.minutes_basic)
+        expected = [{'prose': ['Intro1',
+                               'speaker1: Été',
+                               'speaker2: 愛'],
+                     'topic_line': '# Topic1 (Owner1)'},
+                    {'prose': ['Intro2',
+                               'speaker1: Blah',
+                               'speaker2: Booh'],
+                     'topic_line': '# Topic2 (Owner2)'}]
+        self.assertIs(type(actual), list)
+        self.assertListEqual(actual, expected)
 
 
 if __name__ == '__main__':
