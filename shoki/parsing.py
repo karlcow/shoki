@@ -8,6 +8,65 @@
 
 import re
 
+import shoki_config as cfg
+
+
+def extract_blocks(text_minutes):
+    """Separate the full minutes into individual topic blocks."""
+    # The file starts with headers
+    headers = True
+    minutes_block = []
+    prose_text = []
+    new_topic = True
+    for line in text_minutes.split('\n'):
+        if line.strip() == '' and headers:
+            # we are entering the topics.
+            headers = False
+        elif line.startswith(cfg.END):
+            # we reached the end of the minutes section
+            break
+        elif not headers:
+            # we are entering the minutes section
+            if new_topic and line.startswith(cfg.TOPIC_HEADER):
+                # a topic line starts a block
+                new_topic = False
+                text_block = {'topic_line': line}
+                prose_text = []
+            elif line.strip() != '':
+                # if line is not empty it's part of a topic block.
+                prose_text.append(line)
+            elif not new_topic and line.strip() == '':
+                # if line is empty we reached the end of a topic block.
+                new_topic = True
+                text_block['prose'] = prose_text
+                minutes_block.append(text_block)
+                text_block = {}
+            else:
+                # not an interesting line.
+                continue
+    return minutes_block
+
+
+def extract_topic(topic_line):
+    """Extract the topic and the owner of a discussion.
+
+    - The first non empty line of a block.
+    - Starting with a special character in config.
+    - Return a dictionary with a topic and a owner.
+    - Warns if there is no owner.
+    """
+    # we take the last parenthesis
+    if '(' in topic_line:
+        topic_text, owner_text = topic_line.rsplit('(', 1)
+        # no space and remove the closing parenthesis
+        owner = owner_text.strip()[:-1]
+    else:
+        topic_text = topic_line
+        owner = None
+    # we remove the starting characters and remove spaces
+    topic = topic_text.split('#')[1].strip()
+    return {'topic': topic, 'owner': owner}
+
 
 def meta_headers(text_minutes):
     """Extract the metadata section of a meeting.
