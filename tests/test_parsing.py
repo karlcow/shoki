@@ -8,6 +8,7 @@
 
 import unittest
 
+from shoki.parsing import extract_blocks
 from shoki.parsing import meeting_date
 from shoki.parsing import meta_headers
 
@@ -44,6 +45,18 @@ class TestShokiParsing(unittest.TestCase):
                     "scribe": "Aminata"}
         self.assertIs(type(actual), dict)
         self.assertDictEqual(actual, expected)
+
+    def test_topic_owner(self):
+        """Extracts the topic and owner of a discussion."""
+        minutes_block = extract_blocks[self.minutes]
+        actual = minutes_block[0]
+        expected = {'topic': 'Walden', 'owner': 'Henry David Thoreau'}
+        self.assertIs(type(actual), dict)
+        self.assertDictEqual(actual, expected)
+        actual2 = minutes_block[2]
+        expected2 = {'topic': 'Topic without owner', 'owner': None}
+        self.assertIs(type(actual2), dict)
+        self.assertDictEqual(actual2, expected2)
 
 
 if __name__ == '__main__':
