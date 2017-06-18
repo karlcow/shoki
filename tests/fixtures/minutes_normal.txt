@@ -16,6 +16,16 @@ Then there was the bad weather. It would come in one day when the fall was over.
 ernest: We would have to shut the windows in the night against the rain and the cold wind would strip the leaves from the trees in the Place Contrescarpe. https://en.wikipedia.org/wiki/Ernest_Hemingway
 hemingway: The leaves lay sodden in the rain and the wind drove the rain against the big green autobus at the terminal and the Café des Amateurs was crowded and the windows misted over from the heat and the smoke inside.
 
+# Topic without owner
+It's happening sometimes that people forget to own an agenda item.
+virginia: Who proposed this?
+woolf: No idea, but is it really worth discussing?
+
+# Non verbal updates (Virginia Woolf)
+I am rooted, but I flow.
+
+
+
 
 ===========AGENDA ITEMS ABOVE THIS LINE===========
 
@@ -23,7 +33,7 @@ hemingway: The leaves lay sodden in the rain and the wind drove the rain against
 2. Add an agenda item above by using this format below.
    Provide links when referring to previous discussions:
 
-## short topic (irc_name)
+# short topic (irc_name)
 Short description
 
 ==================================================
