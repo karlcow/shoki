@@ -9,6 +9,7 @@
 import unittest
 
 from shoki.parsing import meeting_date
+from shoki.parsing import meta_headers
 
 FIXTURE_DIR = './tests/fixtures/'
 
@@ -27,10 +28,20 @@ class TestShokiParsing(unittest.TestCase):
         return minutes_fixture
 
     def test_meeting_date(self):
-        """Extract the meeting date."""
+        """Extracts the meeting date."""
         actual = meeting_date(self.minutes)
         expected = '2017-03-21'
         self.assertEqual(actual, expected)
+
+    def test_meta_headers(self):
+        """Returns the dictionary for meeting metatada."""
+        actual = meta_headers(self.minutes)
+        expected = {"meeting": "Web Compatibility",
+                    "date": "21 March 2017 - 6:00 PDT",
+                    "minutes": "https://example.org/meetings/2017-03-21",
+                    "scribe": "Aminata"}
+        self.assertIs(type(actual), dict)
+        self.assertDictEqual(actual, expected)
 
 
 if __name__ == '__main__':
