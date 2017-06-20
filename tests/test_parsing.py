@@ -9,6 +9,7 @@
 import unittest
 
 from shoki.parsing import extract_blocks
+from shoki.parsing import extract_prose
 from shoki.parsing import extract_topic
 from shoki.parsing import meeting_date
 from shoki.parsing import meta_headers
@@ -64,7 +65,7 @@ class TestShokiParsing(unittest.TestCase):
         self.assertDictEqual(actual3, expected3)
 
     def test_minutes_blocks(self):
-        """Extract minutes into blocks."""
+        """Extracts minutes into blocks."""
         actual = extract_blocks(self.minutes_basic)
         expected = [{'prose': ['Intro1',
                                'speaker1: Été',
@@ -74,6 +75,19 @@ class TestShokiParsing(unittest.TestCase):
                                'speaker1: Blah',
                                'speaker2: Booh'],
                      'topic_line': '# Topic2 (Owner2)'}]
+        self.assertIs(type(actual), list)
+        self.assertListEqual(actual, expected)
+
+    def test_from_blocks_to_structure(self):
+        """Extracts the discussion structure from list of lines."""
+        blocks = extract_blocks(self.minutes)
+        # Let's first test the Walden block
+        walden = blocks[0]['prose']
+        actual = extract_prose(walden)
+        expected = [
+            {'speaker': 'henry', 'said': 'To be awake is to be alive.'},
+            {'speaker': 'david', 'said': 'I have always been regretting that I was not as wise as the day I was born.'},  # nopep8
+            {'intro': 'Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores. Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world. '}]  # nopep8
         self.assertIs(type(actual), list)
         self.assertListEqual(actual, expected)
 
