@@ -4,7 +4,9 @@ Minutes: https://example.org/meetings/2017-03-21
 Scribe: Aminata
 
 # Walden (Henry David Thoreau)
-Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores. Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world.
+Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores.
+
+Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world.
 henry: To be awake is to be alive.
 david: I have always been regretting that I was not as wise as the day I was born.
 
@@ -20,6 +22,14 @@ woolf: No idea, but is it really worth discussing?
 
 # Non verbal updates (Virginia Woolf)
 I am rooted, but I flow.
+
+# Woth discussing (Julien Gracq)
+julien: there was no description, but I'm fine.
+gracq: And the scribes minutes me on multiple lines
+because he can.
+
+sometimes with spaces.
+TODO: julien to check if it break the tests. 2017-06-20
 
 
 
