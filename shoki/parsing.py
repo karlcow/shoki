@@ -68,6 +68,36 @@ def extract_topic(topic_line):
     return {'topic': topic, 'owner': owner}
 
 
+def extract_prose(prose_block):
+    """Extract a structure ready to be formatted.
+
+    Input is a list of dictionaries, one for each topic.
+    the dictionary
+    """
+    discussion = []
+    speaking = False
+    voice = {}
+    description = {'intro': ''}
+    for line in prose_block:
+        speaker, sep, text = line.partition(':')
+        if speaker.find(' ') == -1:
+            # We are in the speaker section.
+            speaking = True
+            voice = {'speaker': speaker, 'said': text.lstrip()}
+        else:
+            # Either intro or continuation line.
+            if not speaking:
+                description['intro'] += '{} '.format(line)
+            else:
+                # this is a continuation line, we add the full line.
+                voice['said'] += '{} '.format(line)
+        if voice:
+            discussion.append(voice)
+    if description['intro']:
+        discussion.append(description)
+    return discussion
+
+
 def meta_headers(text_minutes):
     """Extract the metadata section of a meeting.
 
