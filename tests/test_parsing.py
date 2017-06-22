@@ -87,8 +87,8 @@ class TestShokiParsing(unittest.TestCase):
         actual = extract_prose(walden)
         expected = [
             {'speaker': 'henry', 'said': 'To be awake is to be alive.'},
-            {'speaker': 'david', 'said': 'I have always been regretting that I was not as wise as the day I was born.'},  # nopep8
-            {'intro': 'Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores. Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world.'}]  # nopep8
+            {'speaker': 'david', 'said': 'I have always been regretting that I was not as wise as the day I was born.'},  # noqa: E501
+            {'intro': 'Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores. Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world.'}]  # noqa: E501
         self.assertIs(type(actual), list)
         self.assertListEqual(actual, expected)
         worth = blocks[4]['prose']
@@ -97,7 +97,7 @@ class TestShokiParsing(unittest.TestCase):
             {'speaker': 'julien',
              'said': "there was no description, but I'm fine."},
             {'speaker': 'gracq',
-             'said': 'And the scribe minutes me on multiple lines because he can. sometimes with spaces.'},  # nopep8
+             'said': 'And the scribe minutes me on multiple lines because he can. sometimes with spaces.'},  # noqa: E501
             {'owner': 'julien',
              'todo': 'check if it break the tests.',
              'deadline': '2017-06-20'}

@@ -153,8 +153,6 @@ def meeting_date(meta_date):
     day = result.group('day')
     month = result.group('month')
     year = result.group('year')
-    time = result.group('time')
-    timezone = result.group('timezone')
     if month == 'March':
         month = '03'
     return '{0}-{1}-{2}'.format(year, month, day)
