@@ -10,6 +10,7 @@ import unittest
 
 from shoki.parsing import extract_blocks
 from shoki.parsing import extract_prose
+from shoki.parsing import extract_todo
 from shoki.parsing import extract_topic
 from shoki.parsing import meeting_date
 from shoki.parsing import meta_headers
@@ -87,9 +88,36 @@ class TestShokiParsing(unittest.TestCase):
         expected = [
             {'speaker': 'henry', 'said': 'To be awake is to be alive.'},
             {'speaker': 'david', 'said': 'I have always been regretting that I was not as wise as the day I was born.'},  # nopep8
-            {'intro': 'Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores. Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world. '}]  # nopep8
+            {'intro': 'Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores. Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world.'}]  # nopep8
         self.assertIs(type(actual), list)
         self.assertListEqual(actual, expected)
+        worth = blocks[4]['prose']
+        actual = extract_prose(worth)
+        expected = [
+            {'speaker': 'julien',
+             'said': "there was no description, but I'm fine."},
+            {'speaker': 'gracq',
+             'said': 'And the scribe minutes me on multiple lines because he can. sometimes with spaces.'},  # nopep8
+            {'owner': 'julien',
+             'todo': 'check if it break the tests.',
+             'deadline': '2017-06-20'}
+            ]
+        self.assertListEqual(actual, expected)
+        non_verbal = blocks[3]['prose']
+        actual = extract_prose(non_verbal)
+        expected = [{'intro': 'I am rooted, but I flow.'}]
+        self.assertListEqual(actual, expected)
+
+    def test_extract_todo(self):
+        """Todo lines are parsed correctly"""
+        flag = 'TODO'
+        text = 'julien to check if it break the tests. 2017-06-20'
+        actual = extract_todo(flag, text)
+        expected = {'owner': 'julien',
+                    'todo': 'check if it break the tests.',
+                    'deadline': '2017-06-20'}
+        self.assertIs(type(actual), dict)
+        self.assertDictEqual(actual, expected)
 
 
 if __name__ == '__main__':
