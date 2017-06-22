@@ -78,20 +78,31 @@ def extract_prose(prose_block):
     speaking = False
     voice = {}
     description = {'intro': ''}
+    firstline = True
     for line in prose_block:
         speaker, sep, text = line.partition(':')
         if speaker.find(' ') == -1:
             # We are in the speaker section.
             speaking = True
-            voice = {'speaker': speaker, 'said': text.lstrip()}
+            continuation = False
+            if speaker.lower() == 'todo':
+                # This is an action item
+                voice = extract_todo(speaker, text)
+            else:
+                voice = {'speaker': speaker, 'said': text.lstrip()}
         else:
             # Either intro or continuation line.
             if not speaking:
-                description['intro'] += '{} '.format(line)
+                if firstline:
+                    description['intro'] = line
+                    firstline = False
+                else:
+                    description['intro'] += ' {}'.format(line)
             else:
+                continuation = True
                 # this is a continuation line, we add the full line.
-                voice['said'] += '{} '.format(line)
-        if voice:
+                voice['said'] += ' {}'.format(line)
+        if voice and not continuation:
             discussion.append(voice)
     if description['intro']:
         discussion.append(description)
@@ -112,6 +123,21 @@ def meta_headers(text_minutes):
         meta_key, meta_value = line.split(':', 1)
         meta[meta_key.strip().lower()] = meta_value.strip()
     return meta
+
+
+def extract_todo(flag, text):
+    """Extracts an action item line into a dict structure.
+
+    - owner: the owner
+    - todo: the proper action item
+    - deadline: when the action item needs to be executed
+    """
+    owner, action_line = text.split(' to ', 1)
+    todo = action_line.strip()[:-10]
+    todo_date = action_line.strip()[-10:]
+    return {'owner': owner.strip(),
+            'todo': todo.strip(),
+            'deadline': todo_date}
 
 
 def meeting_date(meta_date):
