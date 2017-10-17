@@ -6,11 +6,15 @@
 
 """Modeling the minutes."""
 
-import shoki_config as cfg
+import urllib.request
+
+from shoki import formatter
 from shoki import parsing
+from shoki import shoki_config
+
 
 def minutes_as_data(text):
-    """Returns a data structure for the minutes."""
+    """Return a data structure for the minutes."""
     minutes_data = {}
     # Handling the meta data of the meeting
     meta = parsing.meta_headers(text)
@@ -24,6 +28,17 @@ def minutes_as_data(text):
     blocks = parsing.extract_blocks(text)
     for block in blocks:
         discussion = parsing.extract_topic(block['topic_line'])
-        discussion['discussion'] = parsing.extract_prose(block['prose'])
+        discussion['discussion'], description = parsing.extract_prose(
+            block['prose'])
+        discussion['intro'] = description
         minutes_data['record'].append(discussion)
     return minutes_data
+
+
+def create_minutes(location=shoki_config.LOCATION, out_format='webcompatwiki'):
+    """Create Minutes."""
+    minutes = ''
+    with urllib.request.urlopen(location) as f:
+        raw_text = f.read().decode('utf-8')
+    minutes = formatter.convert(minutes_as_data(raw_text), out_format)
+    return minutes

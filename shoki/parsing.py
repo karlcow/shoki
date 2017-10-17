@@ -4,11 +4,11 @@
 # License, v. 2.0. If a copy of the MPL was not distributed with this
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-"""Tests for parsing Meeting Minutes."""
+"""Meeting Minutes Parser."""
 
-import re
+import datetime
 
-import shoki_config as cfg
+from shoki import shoki_config
 
 
 def extract_blocks(text_minutes):
@@ -22,12 +22,12 @@ def extract_blocks(text_minutes):
         if line.strip() == '' and headers:
             # we are entering the topics.
             headers = False
-        elif line.startswith(cfg.END):
+        elif line.startswith(shoki_config.END):
             # we reached the end of the minutes section
             break
         elif not headers:
             # we are entering the minutes section
-            if new_topic and line.startswith(cfg.TOPIC_HEADER):
+            if new_topic and line.startswith(shoki_config.TOPIC_HEADER):
                 # a topic line starts a block
                 new_topic = False
                 text_block = {'topic_line': line}
@@ -77,7 +77,7 @@ def extract_prose(prose_block):
     discussion = []
     speaking = False
     voice = {}
-    description = {'intro': ''}
+    description = ''
     firstline = True
     for line in prose_block:
         speaker, sep, text = line.partition(':')
@@ -94,19 +94,17 @@ def extract_prose(prose_block):
             # Either intro or continuation line.
             if not speaking:
                 if firstline:
-                    description['intro'] = line
+                    description = line
                     firstline = False
                 else:
-                    description['intro'] += ' {}'.format(line)
+                    description += ' {}'.format(line)
             else:
                 continuation = True
                 # this is a continuation line, we add the full line.
                 voice['said'] += ' {}'.format(line)
         if voice and not continuation:
             discussion.append(voice)
-    if description['intro']:
-        discussion.append(description)
-    return discussion
+    return discussion, description
 
 
 def meta_headers(text_minutes):
@@ -126,7 +124,7 @@ def meta_headers(text_minutes):
 
 
 def extract_todo(flag, text):
-    """Extracts an action item line into a dict structure.
+    """Extract an action item line into a dict structure.
 
     - owner: the owner
     - todo: the proper action item
@@ -143,16 +141,10 @@ def extract_todo(flag, text):
 def meeting_date(meta_date):
     """Extract the meeting date.
 
-    parses a date with the format 21 March 2017 and returns 2017-03-21."""
-    pattern = re.compile(('(?P<day>\d{1,2})\s+'
-                          '(?P<month>\w+)\s+'
-                          '(?P<year>\d{4})[\s-]*'
-                          '(?P<time>\d{1,2}:\d{1,2})\s+'
-                          '(?P<timezone>\w+)'))
-    result = pattern.search(meta_date)
-    day = result.group('day')
-    month = result.group('month')
-    year = result.group('year')
-    if month == 'March':
-        month = '03'
-    return '{0}-{1}-{2}'.format(year, month, day)
+    - Parses a date with the format 3 October 2017 - 13:00 UTC
+    - Returns 2017-03-21.
+    """
+    # timezones are not parseable with strptime and we do not really need it.
+    dt = datetime.datetime.strptime(meta_date[:-4], '%d %B %Y - %H:%M')
+    formatted_date = dt.strftime('%Y-%m-%d')
+    return formatted_date
