@@ -19,26 +19,32 @@ FIXTURE_DIR = './tests/fixtures/'
 
 
 class TestShokiParsing(unittest.TestCase):
+    """Test the parsing rules for the minutes."""
+
     def setUp(self):
+        """Set up the tests."""
         self.minutes = self.read_minutes('minutes_normal.txt')
         self.minutes_basic = self.read_minutes('minutes_normal_no_cruft.txt')
         self.headers = meta_headers(self.minutes)
-        self.meta_date = self.headers['date']
 
     def tearDown(self):
+        """Tear down the tests."""
         pass
 
     def read_minutes(self, minutes_fixture):
-        """Reads the fixture for tests."""
+        """Read the fixture for tests."""
         with open(FIXTURE_DIR + minutes_fixture) as f:
             minutes_fixture = f.read()
         return minutes_fixture
 
     def test_meeting_date(self):
         """Extracts the meeting date."""
-        actual = meeting_date(self.meta_date)
-        expected = '2017-03-21'
-        self.assertEqual(actual, expected)
+        self.assertEqual(
+            meeting_date('30 October 2017 - 13:00 UTC'), '2017-10-30')
+        self.assertEqual(
+            meeting_date('3 March 2017 - 13:00 UTC'), '2017-03-03')
+        self.assertEqual(
+            meeting_date('3 March 2017 - 1:00 PDT'), '2017-03-03')
 
     def test_meta_headers(self):
         """Returns the dictionary for meeting metatada."""
@@ -85,31 +91,21 @@ class TestShokiParsing(unittest.TestCase):
         # Let's first test the Walden block
         walden = blocks[0]['prose']
         actual = extract_prose(walden)
-        expected = [
-            {'speaker': 'henry', 'said': 'To be awake is to be alive.'},
-            {'speaker': 'david', 'said': 'I have always been regretting that I was not as wise as the day I was born.'},  # noqa: E501
-            {'intro': 'Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores. Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world.'}]  # noqa: E501
-        self.assertIs(type(actual), list)
-        self.assertListEqual(actual, expected)
+        expected = ([{'speaker': 'henry', 'said': 'To be awake is to be alive.'}, {'speaker': 'david', 'said': 'I have always been regretting that I was not as wise as the day I was born.'}], 'Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores. Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world.')  # noqa: E501
+        self.assertIs(type(actual), tuple)
+        self.assertTupleEqual(actual, expected)
         worth = blocks[4]['prose']
         actual = extract_prose(worth)
-        expected = [
-            {'speaker': 'julien',
-             'said': "there was no description, but I'm fine."},
-            {'speaker': 'gracq',
-             'said': 'And the scribe minutes me on multiple lines because he can. sometimes with spaces.'},  # noqa: E501
-            {'owner': 'julien',
-             'todo': 'check if it break the tests.',
-             'deadline': '2017-06-20'}
-            ]
-        self.assertListEqual(actual, expected)
+        print(actual)
+        expected = ([{'speaker': 'julien', 'said': "there was no description, but I'm fine."}, {'speaker': 'gracq', 'said': 'And the scribe minutes me on multiple lines because he can. sometimes with spaces.'}, {'owner': 'julien', 'todo': 'check if it break the tests.', 'deadline': '2017-06-20'}], '')  # noqa: E501
+        self.assertTupleEqual(actual, expected)
         non_verbal = blocks[3]['prose']
         actual = extract_prose(non_verbal)
-        expected = [{'intro': 'I am rooted, but I flow.'}]
-        self.assertListEqual(actual, expected)
+        expected = ([], 'I am rooted, but I flow.')
+        self.assertTupleEqual(actual, expected)
 
     def test_extract_todo(self):
-        """Todo lines are parsed correctly"""
+        """Todo lines are parsed correctly."""
         flag = 'TODO'
         text = 'julien to check if it break the tests. 2017-06-20'
         actual = extract_todo(flag, text)

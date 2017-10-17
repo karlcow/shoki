@@ -8,20 +8,25 @@
 
 import unittest
 
-from shoki import datacore
 from fixtures import minutes_data
+from shoki import datacore
 
 FIXTURE_DIR = './tests/fixtures/'
 
+
 class TestShokiDatacore(unittest.TestCase):
+    """Tests for the core data structure."""
+
     def setUp(self):
+        """Set up tests."""
         self.maxDiff = None
 
     def tearDown(self):
+        """Tear down tests."""
         pass
 
     def read_minutes(self, minutes_fixture):
-        """Reads the fixture for tests."""
+        """Read the fixture for tests."""
         with open(FIXTURE_DIR + minutes_fixture) as f:
             minutes_fixture = f.read()
         return minutes_fixture
