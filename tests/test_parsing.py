@@ -39,10 +39,12 @@ class TestShokiParsing(unittest.TestCase):
 
     def test_meeting_date(self):
         """Extracts the meeting date."""
-        self.assertEqual(
-            meeting_date('30 October 2017 - 13:00 UTC'), '2017-10-30')
-        self.assertEqual(
-            meeting_date('3 March 2017 - 13:00 UTC'), '2017-03-03')
+        self.assertEqual(meeting_date(
+            '30 October 2017 - 08:00 USA Central time'),
+            '2017-10-30')
+        self.assertEqual(meeting_date(
+            '3 March 2017 - 08:00 USA Central time'),
+            '2017-03-03')
         self.assertEqual(
             meeting_date('3 March 2017 - 1:00 PDT'), '2017-03-03')
 

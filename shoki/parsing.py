@@ -145,6 +145,7 @@ def meeting_date(meta_date):
     - Returns 2017-03-21.
     """
     # timezones are not parseable with strptime and we do not really need it.
-    dt = datetime.datetime.strptime(meta_date[:-4], '%d %B %Y - %H:%M')
+    dt = datetime.datetime.strptime(
+        ' '.join(meta_date.split(' ', 5)[0:5]), '%d %B %Y - %H:%M')
     formatted_date = dt.strftime('%Y-%m-%d')
     return formatted_date
