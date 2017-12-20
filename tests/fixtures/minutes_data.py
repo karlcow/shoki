@@ -53,7 +53,10 @@ minutes_data = {
              'speaker': 'gracq'},
             {'deadline': '2017-06-20',
              'owner': 'julien',
-             'todo': 'check if it break the tests.'}],
+             'todo': 'check if it break the tests.'},
+            {'deadline': '2017-06-21',
+             'owner': 'paul',
+             'todo': 'test if action and todo are handled the same.'},],
          'intro': '',
         }
     ]
