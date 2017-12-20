@@ -98,8 +98,7 @@ class TestShokiParsing(unittest.TestCase):
         self.assertTupleEqual(actual, expected)
         worth = blocks[4]['prose']
         actual = extract_prose(worth)
-        print(actual)
-        expected = ([{'speaker': 'julien', 'said': "there was no description, but I'm fine."}, {'speaker': 'gracq', 'said': 'And the scribe minutes me on multiple lines because he can. sometimes with spaces.'}, {'owner': 'julien', 'todo': 'check if it break the tests.', 'deadline': '2017-06-20'}], '')  # noqa: E501
+        expected = ([{'speaker': 'julien', 'said': "there was no description, but I'm fine."}, {'speaker': 'gracq', 'said': 'And the scribe minutes me on multiple lines because he can. sometimes with spaces.'}, {'owner': 'julien', 'todo': 'check if it break the tests.', 'deadline': '2017-06-20'}, {'owner': 'paul', 'todo': 'test if action and todo are handled the same.', 'deadline': '2017-06-21'}], '')  # noqa: E501
         self.assertTupleEqual(actual, expected)
         non_verbal = blocks[3]['prose']
         actual = extract_prose(non_verbal)
@@ -114,6 +113,14 @@ class TestShokiParsing(unittest.TestCase):
         expected = {'owner': 'julien',
                     'todo': 'check if it break the tests.',
                     'deadline': '2017-06-20'}
+        self.assertIs(type(actual), dict)
+        self.assertDictEqual(actual, expected)
+        flag = 'ACTION'
+        text = 'paul to test if action and todo are handled the same. 2017-06-21'  # noqa
+        actual = extract_todo(flag, text)
+        expected = {'owner': 'paul',
+                    'todo': 'test if action and todo are handled the same.',
+                    'deadline': '2017-06-21'}
         self.assertIs(type(actual), dict)
         self.assertDictEqual(actual, expected)
 
