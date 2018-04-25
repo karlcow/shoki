@@ -24,49 +24,51 @@ def convert(minutes_data, out_format):
     templates = load_templates(out_format)
     # If there is a list of templates, the format exists.
     if templates:
-        if len(minutes_data['scribe']) > 1:
-            scribes = ', '.join(minutes_data['scribe'])
+        if len(minutes_data["scribe"]) > 1:
+            scribes = ", ".join(minutes_data["scribe"])
         else:
-            scribes = minutes_data['scribe'][0]
-        text = ''
-        text += templates['main'].substitute(
-            title=minutes_data['title'],
-            date=minutes_data['meeting_date'],
-            previous_date='@@TO_FIX',
-            scribe=scribes)
-        for discussion in minutes_data['record']:
+            scribes = minutes_data["scribe"][0]
+        text = ""
+        text += templates["main"].substitute(
+            title=minutes_data["title"],
+            date=minutes_data["meeting_date"],
+            previous_date="@@TO_FIX",
+            scribe=scribes,
+        )
+        for discussion in minutes_data["record"]:
             DISCUSSION = True
             # Discussion title and owners
-            owner = discussion['owner']
+            owner = discussion["owner"]
             if not owner:
-                owner = ' 🐝 '
-            text += templates['topic'].substitute(
-                topic=discussion['topic'],
-                owner=owner)
+                owner = " 🐝 "
+            text += templates["topic"].substitute(
+                topic=discussion["topic"], owner=owner
+            )
             # Time for discussion description
-            intro = discussion['intro']
-            if not discussion['discussion']:
+            intro = discussion["intro"]
+            if not discussion["discussion"]:
                 DISCUSSION = False
             if intro and DISCUSSION:
-                text += templates['intro'].substitute(intro=intro)
+                text += templates["intro"].substitute(intro=intro)
             else:
-                text += templates['intro_no_chat'].substitute(intro=intro)
+                text += templates["intro_no_chat"].substitute(intro=intro)
             # Let's go to the flow of the discussion.
-            for voice in discussion['discussion']:
-                if voice.get('speaker'):
-                    text += templates['voice'].substitute(
-                        speaker=voice['speaker'],
-                        said=voice['said'])
-                elif voice.get('todo'):
-                    text += templates['todo'].substitute(
-                        owner=voice['owner'],
-                        todo=voice['todo'],
-                        deadline=voice['deadline'])
+            for voice in discussion["discussion"]:
+                if voice.get("speaker"):
+                    text += templates["voice"].substitute(
+                        speaker=voice["speaker"], said=voice["said"]
+                    )
+                elif voice.get("todo"):
+                    text += templates["todo"].substitute(
+                        owner=voice["owner"],
+                        todo=voice["todo"],
+                        deadline=voice["deadline"],
+                    )
                 else:
-                    text += '@@WHATT probably something wrong'
+                    text += "@@WHATT probably something wrong"
         return text
     else:
-        sys.exit('This {f} format does not exist yet.'.format(f=out_format))
+        sys.exit("This {f} format does not exist yet.".format(f=out_format))
 
 
 def load_templates(out_format):
@@ -74,9 +76,7 @@ def load_templates(out_format):
 
     If the output format doesn't exist. It returns None.
     """
-    templates_dir = os.path.join(shoki_config.ROOT,
-                                 'shoki/templates/',
-                                 out_format)
+    templates_dir = os.path.join(shoki_config.ROOT, "shoki/templates/", out_format)
     if os.path.isdir(templates_dir):
         t = {}
         for tmpl_name in os.listdir(templates_dir):

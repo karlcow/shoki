@@ -18,27 +18,26 @@ def minutes_as_data(text):
     minutes_data = {}
     # Handling the meta data of the meeting
     meta = parsing.meta_headers(text)
-    mtg_date = parsing.meeting_date(meta['date'])
-    minutes_data['title'] = meta['meeting']
-    minutes_data['scribe'] = [meta['scribe']]
-    minutes_data['meeting_date'] = mtg_date
-    minutes_data['attendees'] = []
-    minutes_data['record'] = []
+    mtg_date = parsing.meeting_date(meta["date"])
+    minutes_data["title"] = meta["meeting"]
+    minutes_data["scribe"] = [meta["scribe"]]
+    minutes_data["meeting_date"] = mtg_date
+    minutes_data["attendees"] = []
+    minutes_data["record"] = []
     # Handling the discussions record
     blocks = parsing.extract_blocks(text)
     for block in blocks:
-        discussion = parsing.extract_topic(block['topic_line'])
-        discussion['discussion'], description = parsing.extract_prose(
-            block['prose'])
-        discussion['intro'] = description
-        minutes_data['record'].append(discussion)
+        discussion = parsing.extract_topic(block["topic_line"])
+        discussion["discussion"], description = parsing.extract_prose(block["prose"])
+        discussion["intro"] = description
+        minutes_data["record"].append(discussion)
     return minutes_data
 
 
-def create_minutes(location=shoki_config.LOCATION, out_format='webcompatwiki'):
+def create_minutes(location=shoki_config.LOCATION, out_format="webcompatwiki"):
     """Create Minutes."""
-    minutes = ''
+    minutes = ""
     with urllib.request.urlopen(location) as f:
-        raw_text = f.read().decode('utf-8')
+        raw_text = f.read().decode("utf-8")
     minutes = formatter.convert(minutes_as_data(raw_text), out_format)
     return minutes

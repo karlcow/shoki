@@ -15,7 +15,7 @@ from shoki.parsing import extract_topic
 from shoki.parsing import meeting_date
 from shoki.parsing import meta_headers
 
-FIXTURE_DIR = './tests/fixtures/'
+FIXTURE_DIR = "./tests/fixtures/"
 
 
 class TestShokiParsing(unittest.TestCase):
@@ -23,8 +23,8 @@ class TestShokiParsing(unittest.TestCase):
 
     def setUp(self):
         """Set up the tests."""
-        self.minutes = self.read_minutes('minutes_normal.txt')
-        self.minutes_basic = self.read_minutes('minutes_normal_no_cruft.txt')
+        self.minutes = self.read_minutes("minutes_normal.txt")
+        self.minutes_basic = self.read_minutes("minutes_normal_no_cruft.txt")
         self.headers = meta_headers(self.minutes)
 
     def tearDown(self):
@@ -39,51 +39,54 @@ class TestShokiParsing(unittest.TestCase):
 
     def test_meeting_date(self):
         """Extracts the meeting date."""
-        self.assertEqual(meeting_date(
-            '30 October 2017 - 08:00 USA Central time'),
-            '2017-10-30')
-        self.assertEqual(meeting_date(
-            '3 March 2017 - 08:00 USA Central time'),
-            '2017-03-03')
         self.assertEqual(
-            meeting_date('3 March 2017 - 1:00 PDT'), '2017-03-03')
+            meeting_date("30 October 2017 - 08:00 USA Central time"), "2017-10-30"
+        )
+        self.assertEqual(
+            meeting_date("3 March 2017 - 08:00 USA Central time"), "2017-03-03"
+        )
+        self.assertEqual(meeting_date("3 March 2017 - 1:00 PDT"), "2017-03-03")
 
     def test_meta_headers(self):
         """Returns the dictionary for meeting metatada."""
         actual = meta_headers(self.minutes)
-        expected = {"meeting": "Web Compatibility",
-                    "date": "21 March 2017 - 6:00 PDT",
-                    "minutes": "https://example.org/meetings/2017-03-21",
-                    "scribe": "Aminata"}
+        expected = {
+            "meeting": "Web Compatibility",
+            "date": "21 March 2017 - 6:00 PDT",
+            "minutes": "https://example.org/meetings/2017-03-21",
+            "scribe": "Aminata",
+        }
         self.assertIs(type(actual), dict)
         self.assertDictEqual(actual, expected)
 
     def test_topic_owner(self):
         """Extracts the topic and owner of a discussion."""
-        actual = extract_topic('# Walden (Henry David Thoreau) ')
-        expected = {'topic': 'Walden', 'owner': 'Henry David Thoreau'}
+        actual = extract_topic("# Walden (Henry David Thoreau) ")
+        expected = {"topic": "Walden", "owner": "Henry David Thoreau"}
         self.assertIs(type(actual), dict)
         self.assertDictEqual(actual, expected)
-        actual2 = extract_topic('# topic without owner')
-        expected2 = {'topic': 'topic without owner', 'owner': None}
+        actual2 = extract_topic("# topic without owner")
+        expected2 = {"topic": "topic without owner", "owner": None}
         self.assertIs(type(actual2), dict)
         self.assertDictEqual(actual2, expected2)
-        actual3 = extract_topic('#topic and spaces(owner)')
-        expected3 = {'topic': 'topic and spaces', 'owner': 'owner'}
+        actual3 = extract_topic("#topic and spaces(owner)")
+        expected3 = {"topic": "topic and spaces", "owner": "owner"}
         self.assertIs(type(actual3), dict)
         self.assertDictEqual(actual3, expected3)
 
     def test_minutes_blocks(self):
         """Extracts minutes into blocks."""
         actual = extract_blocks(self.minutes_basic)
-        expected = [{'prose': ['Intro1',
-                               'speaker1: Été',
-                               'speaker2: 愛'],
-                     'topic_line': '# Topic1 (Owner1)'},
-                    {'prose': ['Intro2',
-                               'speaker1: Blah',
-                               'speaker2: Booh'],
-                     'topic_line': '# Topic2 (Owner2)'}]
+        expected = [
+            {
+                "prose": ["Intro1", "speaker1: Été", "speaker2: 愛"],
+                "topic_line": "# Topic1 (Owner1)",
+            },
+            {
+                "prose": ["Intro2", "speaker1: Blah", "speaker2: Booh"],
+                "topic_line": "# Topic2 (Owner2)",
+            },
+        ]
         self.assertIs(type(actual), list)
         self.assertListEqual(actual, expected)
 
@@ -91,32 +94,60 @@ class TestShokiParsing(unittest.TestCase):
         """Extracts the discussion structure from list of lines."""
         blocks = extract_blocks(self.minutes)
         # Let's first test the Walden block
-        walden = blocks[0]['prose']
+        walden = blocks[0]["prose"]
         actual = extract_prose(walden)
-        expected = ([{'speaker': 'henry', 'said': 'To be awake is to be alive.'}, {'speaker': 'david', 'said': 'I have always been regretting that I was not as wise as the day I was born.'}], 'Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores. Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world.')  # noqa: E501
+        expected = (
+            [
+                {"speaker": "henry", "said": "To be awake is to be alive."},
+                {
+                    "speaker": "david",
+                    "said": "I have always been regretting that I was not as wise as the day I was born.",
+                },
+            ],
+            "Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores. Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world.",
+        )  # noqa: E501
         self.assertIs(type(actual), tuple)
         self.assertTupleEqual(actual, expected)
-        worth = blocks[4]['prose']
+        worth = blocks[4]["prose"]
         actual = extract_prose(worth)
         print(actual)
-        expected = ([{'speaker': 'julien', 'said': "there was no description, but I'm fine."}, {'speaker': 'gracq', 'said': 'And the scribe minutes me on multiple lines because he can. sometimes with spaces.'}, {'owner': 'julien', 'todo': 'check if it break the tests.', 'deadline': '2017-06-20'}], '')  # noqa: E501
+        expected = (
+            [
+                {
+                    "speaker": "julien",
+                    "said": "there was no description, but I'm fine.",
+                },
+                {
+                    "speaker": "gracq",
+                    "said": "And the scribe minutes me on multiple lines because he can. sometimes with spaces.",
+                },
+                {
+                    "owner": "julien",
+                    "todo": "check if it break the tests.",
+                    "deadline": "2017-06-20",
+                },
+            ],
+            "",
+        )  # noqa: E501
         self.assertTupleEqual(actual, expected)
-        non_verbal = blocks[3]['prose']
+        non_verbal = blocks[3]["prose"]
         actual = extract_prose(non_verbal)
-        expected = ([], 'I am rooted, but I flow.')
+        expected = ([], "I am rooted, but I flow.")
         self.assertTupleEqual(actual, expected)
 
     def test_extract_todo(self):
         """Todo lines are parsed correctly."""
-        flag = 'TODO'
-        text = 'julien to check if it break the tests. 2017-06-20'
+        flag = "TODO"
+        text = "julien to check if it break the tests. 2017-06-20"
         actual = extract_todo(flag, text)
-        expected = {'owner': 'julien',
-                    'todo': 'check if it break the tests.',
-                    'deadline': '2017-06-20'}
+        expected = {
+            "owner": "julien",
+            "todo": "check if it break the tests.",
+            "deadline": "2017-06-20",
+        }
         self.assertIs(type(actual), dict)
         self.assertDictEqual(actual, expected)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

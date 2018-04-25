@@ -11,7 +11,7 @@ import unittest
 from fixtures import minutes_data
 from shoki import datacore
 
-FIXTURE_DIR = './tests/fixtures/'
+FIXTURE_DIR = "./tests/fixtures/"
 
 
 class TestShokiDatacore(unittest.TestCase):
@@ -34,10 +34,10 @@ class TestShokiDatacore(unittest.TestCase):
     def test_minutes_data(self):
         """Returns the appropriate data structure."""
         actual = minutes_data.minutes_data
-        text = self.read_minutes('minutes_normal.txt')
+        text = self.read_minutes("minutes_normal.txt")
         expected = datacore.minutes_as_data(text)
         self.assertDictEqual(actual, expected)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -18,8 +18,8 @@ def extract_blocks(text_minutes):
     minutes_block = []
     prose_text = []
     new_topic = True
-    for line in text_minutes.split('\n'):
-        if line.strip() == '' and headers:
+    for line in text_minutes.split("\n"):
+        if line.strip() == "" and headers:
             # we are entering the topics.
             headers = False
         elif line.startswith(shoki_config.END):
@@ -30,15 +30,15 @@ def extract_blocks(text_minutes):
             if new_topic and line.startswith(shoki_config.TOPIC_HEADER):
                 # a topic line starts a block
                 new_topic = False
-                text_block = {'topic_line': line}
+                text_block = {"topic_line": line}
                 prose_text = []
-            elif line.strip() != '':
+            elif line.strip() != "":
                 # if line is not empty it's part of a topic block.
                 prose_text.append(line)
-            elif not new_topic and line.strip() == '':
+            elif not new_topic and line.strip() == "":
                 # if line is empty we reached the end of a topic block.
                 new_topic = True
-                text_block['prose'] = prose_text
+                text_block["prose"] = prose_text
                 minutes_block.append(text_block)
                 text_block = {}
             else:
@@ -56,16 +56,16 @@ def extract_topic(topic_line):
     - Warns if there is no owner.
     """
     # we take the last parenthesis
-    if '(' in topic_line:
-        topic_text, owner_text = topic_line.rsplit('(', 1)
+    if "(" in topic_line:
+        topic_text, owner_text = topic_line.rsplit("(", 1)
         # no space and remove the closing parenthesis
         owner = owner_text.strip()[:-1]
     else:
         topic_text = topic_line
         owner = None
     # we remove the starting characters and remove spaces
-    topic = topic_text.split('#')[1].strip()
-    return {'topic': topic, 'owner': owner}
+    topic = topic_text.split("#")[1].strip()
+    return {"topic": topic, "owner": owner}
 
 
 def extract_prose(prose_block):
@@ -77,19 +77,19 @@ def extract_prose(prose_block):
     discussion = []
     speaking = False
     voice = {}
-    description = ''
+    description = ""
     firstline = True
     for line in prose_block:
-        speaker, sep, text = line.partition(':')
-        if speaker.find(' ') == -1:
+        speaker, sep, text = line.partition(":")
+        if speaker.find(" ") == -1:
             # We are in the speaker section.
             speaking = True
             continuation = False
-            if speaker.lower() == 'todo':
+            if speaker.lower() == "todo":
                 # This is an action item
                 voice = extract_todo(speaker, text)
             else:
-                voice = {'speaker': speaker, 'said': text.lstrip()}
+                voice = {"speaker": speaker, "said": text.lstrip()}
         else:
             # Either intro or continuation line.
             if not speaking:
@@ -97,11 +97,11 @@ def extract_prose(prose_block):
                     description = line
                     firstline = False
                 else:
-                    description += ' {}'.format(line)
+                    description += " {}".format(line)
             else:
                 continuation = True
                 # this is a continuation line, we add the full line.
-                voice['said'] += ' {}'.format(line)
+                voice["said"] += " {}".format(line)
         if voice and not continuation:
             discussion.append(voice)
     return discussion, description
@@ -115,10 +115,10 @@ def meta_headers(text_minutes):
     - Returns a dictionary.
     """
     meta = {}
-    for line in text_minutes.split('\n'):
-        if line.strip() == '':
+    for line in text_minutes.split("\n"):
+        if line.strip() == "":
             break
-        meta_key, meta_value = line.split(':', 1)
+        meta_key, meta_value = line.split(":", 1)
         meta[meta_key.strip().lower()] = meta_value.strip()
     return meta
 
@@ -130,12 +130,10 @@ def extract_todo(flag, text):
     - todo: the proper action item
     - deadline: when the action item needs to be executed
     """
-    owner, action_line = text.split(' to ', 1)
+    owner, action_line = text.split(" to ", 1)
     todo = action_line.strip()[:-10]
     todo_date = action_line.strip()[-10:]
-    return {'owner': owner.strip(),
-            'todo': todo.strip(),
-            'deadline': todo_date}
+    return {"owner": owner.strip(), "todo": todo.strip(), "deadline": todo_date}
 
 
 def meeting_date(meta_date):
@@ -146,6 +144,7 @@ def meeting_date(meta_date):
     """
     # timezones are not parseable with strptime and we do not really need it.
     dt = datetime.datetime.strptime(
-        ' '.join(meta_date.split(' ', 5)[0:5]), '%d %B %Y - %H:%M')
-    formatted_date = dt.strftime('%Y-%m-%d')
+        " ".join(meta_date.split(" ", 5)[0:5]), "%d %B %Y - %H:%M"
+    )
+    formatted_date = dt.strftime("%Y-%m-%d")
     return formatted_date

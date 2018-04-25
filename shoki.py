@@ -22,18 +22,26 @@ commands:
 def create(args):
     """CLI for creating minutes with shoki."""
     parser = argparse.ArgumentParser(
-        description='shoki is formatting your minutes.',
-        argument_default=argparse.SUPPRESS)
-    parser.add_argument('--location', metavar='location',
-                        type=str,
-                        nargs='?',
-                        help='Location of the minutes (file:// or http://)',)
-    parser.add_argument('-t', '--test', metavar='',
-                        help='Create sample minutes using the test file',)
-    parser.add_argument('--out_format', metavar='out_format',
-                        type=str,
-                        nargs='?',
-                        help='Format of the output',)
+        description="shoki is formatting your minutes.",
+        argument_default=argparse.SUPPRESS,
+    )
+    parser.add_argument(
+        "--location",
+        metavar="location",
+        type=str,
+        nargs="?",
+        help="Location of the minutes (file:// or http://)",
+    )
+    parser.add_argument(
+        "-t", "--test", metavar="", help="Create sample minutes using the test file"
+    )
+    parser.add_argument(
+        "--out_format",
+        metavar="out_format",
+        type=str,
+        nargs="?",
+        help="Format of the output",
+    )
     parsed_args = vars(parser.parse_args(args))
     return datacore.create_minutes(**parsed_args)
 
@@ -47,7 +55,7 @@ def main():
     command = sys.argv[1]
     args = sys.argv[2:]
 
-    if command == 'create':
+    if command == "create":
         content = create(args)
         print(content)
     else:
@@ -55,5 +63,5 @@ def main():
         sys.exit()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

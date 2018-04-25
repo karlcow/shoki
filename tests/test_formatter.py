@@ -25,10 +25,9 @@ class TestShokiFormatter(unittest.TestCase):
     def test_convert_unknown_format(self):
         """Returns the appropriate data structure."""
         with self.assertRaises(SystemExit) as err:
-            formatter.convert([], 'zorglub')
-        self.assertEqual('This zorglub format does not exist yet.',
-                         str(err.exception))
+            formatter.convert([], "zorglub")
+        self.assertEqual("This zorglub format does not exist yet.", str(err.exception))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
