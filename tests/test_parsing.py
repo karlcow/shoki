@@ -110,7 +110,6 @@ class TestShokiParsing(unittest.TestCase):
         self.assertTupleEqual(actual, expected)
         worth = blocks[4]["prose"]
         actual = extract_prose(worth)
-        print(actual)
         expected = (
             [
                 {
@@ -126,9 +125,14 @@ class TestShokiParsing(unittest.TestCase):
                     "todo": "check if it break the tests.",
                     "deadline": "2017-06-20",
                 },
+                {
+                    "deadline": "2017-06-21",
+                    "owner": "paul",
+                    "todo": "test if action and todo are handled the same.",
+                },
             ],
             "",
-        )  # noqa: E501
+        )
         self.assertTupleEqual(actual, expected)
         non_verbal = blocks[3]["prose"]
         actual = extract_prose(non_verbal)
@@ -144,6 +148,16 @@ class TestShokiParsing(unittest.TestCase):
             "owner": "julien",
             "todo": "check if it break the tests.",
             "deadline": "2017-06-20",
+        }
+        self.assertIs(type(actual), dict)
+        self.assertDictEqual(actual, expected)
+        flag = "ACTION"
+        text = "paul to test if action and todo are handled the same. 2017-06-21"  # noqa
+        actual = extract_todo(flag, text)
+        expected = {
+            "owner": "paul",
+            "todo": "test if action and todo are handled the same.",
+            "deadline": "2017-06-21",
         }
         self.assertIs(type(actual), dict)
         self.assertDictEqual(actual, expected)

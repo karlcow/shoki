@@ -74,6 +74,11 @@ minutes_data = {
                     "owner": "julien",
                     "todo": "check if it break the tests.",
                 },
+                {
+                    "deadline": "2017-06-21",
+                    "owner": "paul",
+                    "todo": "test if action and todo are handled the same.",
+                },
             ],
             "intro": "",
         },

@@ -85,7 +85,7 @@ def extract_prose(prose_block):
             # We are in the speaker section.
             speaking = True
             continuation = False
-            if speaker.lower() == "todo":
+            if speaker.lower() in ["todo", "action"]:
                 # This is an action item
                 voice = extract_todo(speaker, text)
             else:
