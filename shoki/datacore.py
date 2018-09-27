@@ -28,7 +28,7 @@ def minutes_as_data(text):
     blocks = parsing.extract_blocks(text)
     for block in blocks:
         discussion = parsing.extract_topic(block["topic_line"])
-        discussion["discussion"], description = parsing.extract_prose(block["prose"])
+        discussion["discussion"], description = parsing.extract_prose(block["prose"])  # noqa
         discussion["intro"] = description
         minutes_data["record"].append(discussion)
     return minutes_data
@@ -39,5 +39,9 @@ def create_minutes(location=shoki_config.LOCATION, out_format="webcompatwiki"):
     minutes = ""
     with urllib.request.urlopen(location) as f:
         raw_text = f.read().decode("utf-8")
-    minutes = formatter.convert(minutes_as_data(raw_text), out_format)
+
+    try:
+        minutes = formatter.convert(minutes_as_data(raw_text), out_format)
+    except Exception as e:
+        print(shoki_config.FORMAT_ERROR.format(error=e))
     return minutes

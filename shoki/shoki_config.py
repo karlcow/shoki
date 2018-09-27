@@ -20,3 +20,10 @@ END = "===========AGENDA ITEMS ABOVE THIS LINE==========="
 # Can be a URL on the Web or a text file on the computer
 MINUTES_PATH = os.path.join(ROOT, "./tests/fixtures/minutes_normal.txt")
 LOCATION = urljoin("file://", MINUTES_PATH)
+FORMAT_ERROR = """
+The formatter has failed.
+The file you are dealing with is probably in the wrong format.
+shoki accepts only plain text files.
+
+Error: {error}
+"""
