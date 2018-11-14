@@ -15,7 +15,7 @@ ROOT = os.getcwd()
 # The characters used for marking up the title of a discussion
 TOPIC_HEADER = "#"
 # string to stop parsing
-END = "===========AGENDA ITEMS ABOVE THIS LINE==========="
+END = """--end--"""
 # Default location for the minutes.
 # Can be a URL on the Web or a text file on the computer
 MINUTES_PATH = os.path.join(ROOT, "./tests/fixtures/minutes_normal.txt")
