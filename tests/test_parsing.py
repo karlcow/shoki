@@ -6,6 +6,7 @@
 
 """Tests for parsing Meeting Minutes."""
 
+from unittest.mock import patch
 import unittest
 
 from shoki.parsing import extract_blocks
@@ -38,9 +39,9 @@ class TestShokiParsing(unittest.TestCase):
         return minutes_fixture
 
     def test_meeting_date(self):
-        """Extracts the meeting date."""
-        self.assertEqual(
-            meeting_date("30 October 2017 - 08:00 USA Central time"), "2017-10-30"
+        """Extract the meeting date."""
+        self.assertEqual(meeting_date(
+            "30 October 2017 - 08:00 USA Central time"), "2017-10-30"
         )
         self.assertEqual(
             meeting_date("3 March 2017 - 08:00 USA Central time"), "2017-03-03"
@@ -48,7 +49,7 @@ class TestShokiParsing(unittest.TestCase):
         self.assertEqual(meeting_date("3 March 2017 - 1:00 PDT"), "2017-03-03")
 
     def test_meta_headers(self):
-        """Returns the dictionary for meeting metatada."""
+        """Return the dictionary for meeting metatada."""
         actual = meta_headers(self.minutes)
         expected = {
             "meeting": "Web Compatibility",
@@ -60,7 +61,7 @@ class TestShokiParsing(unittest.TestCase):
         self.assertDictEqual(actual, expected)
 
     def test_topic_owner(self):
-        """Extracts the topic and owner of a discussion."""
+        """Extract the topic and owner of a discussion."""
         actual = extract_topic("# Walden (Henry David Thoreau) ")
         expected = {"topic": "Walden", "owner": "Henry David Thoreau"}
         self.assertIs(type(actual), dict)
@@ -74,8 +75,9 @@ class TestShokiParsing(unittest.TestCase):
         self.assertIs(type(actual3), dict)
         self.assertDictEqual(actual3, expected3)
 
+    @patch('shoki.datacore.shoki_config.END', '--endtest--')
     def test_minutes_blocks(self):
-        """Extracts minutes into blocks."""
+        """Extract minutes into blocks."""
         actual = extract_blocks(self.minutes_basic)
         expected = [
             {
@@ -90,8 +92,9 @@ class TestShokiParsing(unittest.TestCase):
         self.assertIs(type(actual), list)
         self.assertListEqual(actual, expected)
 
+    @patch('shoki.datacore.shoki_config.END', '--endtest--')
     def test_from_blocks_to_structure(self):
-        """Extracts the discussion structure from list of lines."""
+        """Extract the discussion structure from list of lines."""
         blocks = extract_blocks(self.minutes)
         # Let's first test the Walden block
         walden = blocks[0]["prose"]
@@ -101,10 +104,10 @@ class TestShokiParsing(unittest.TestCase):
                 {"speaker": "henry", "said": "To be awake is to be alive."},
                 {
                     "speaker": "david",
-                    "said": "I have always been regretting that I was not as wise as the day I was born.",
+                    "said": "I have always been regretting that I was not as wise as the day I was born.",  # noqa: E501
                 },
             ],
-            "Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores. Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world.",
+            "Let us first be as simple and well as Nature ourselves, dispel the clouds which hang over our brows, and take up a little life into our pores. Do not stay to be an overseer of the poor, but endeavor to become one of the worthies of the world.",  # noqa: E501
         )  # noqa: E501
         self.assertIs(type(actual), tuple)
         self.assertTupleEqual(actual, expected)
@@ -118,7 +121,7 @@ class TestShokiParsing(unittest.TestCase):
                 },
                 {
                     "speaker": "gracq",
-                    "said": "And the scribe minutes me on multiple lines because he can. sometimes with spaces.",
+                    "said": "And the scribe minutes me on multiple lines because he can. sometimes with spaces.",  # noqa: E501
                 },
                 {
                     "owner": "julien",

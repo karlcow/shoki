@@ -34,7 +34,7 @@ ACTION: paul to test if action and todo are handled the same. 2017-06-21
 
 
 
-
+--endtest--
 ===========AGENDA ITEMS ABOVE THIS LINE===========
 
 1. No agenda, no meeting.
