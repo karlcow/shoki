@@ -6,6 +6,7 @@
 
 """Tests for creating the data structure."""
 
+from unittest.mock import patch
 import unittest
 
 from fixtures import minutes_data
@@ -31,8 +32,9 @@ class TestShokiDatacore(unittest.TestCase):
             minutes_fixture = f.read()
         return minutes_fixture
 
+    @patch('shoki.datacore.shoki_config.END', '--endtest--')
     def test_minutes_data(self):
-        """Returns the appropriate data structure."""
+        """Return the appropriate data structure."""
         actual = minutes_data.minutes_data
         text = self.read_minutes("minutes_normal.txt")
         expected = datacore.minutes_as_data(text)
