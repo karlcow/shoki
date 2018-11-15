@@ -81,7 +81,7 @@ def extract_prose(prose_block):
     firstline = True
     for line in prose_block:
         speaker, sep, text = line.partition(":")
-        if speaker.find(" ") == -1:
+        if speaker.find(" ") == -1 and not is_link(line):
             # We are in the speaker section.
             speaking = True
             continuation = False
@@ -133,7 +133,9 @@ def extract_todo(flag, text):
     owner, action_line = text.split(" to ", 1)
     todo = action_line.strip()[:-10]
     todo_date = action_line.strip()[-10:]
-    return {"owner": owner.strip(), "todo": todo.strip(), "deadline": todo_date}
+    return {"owner": owner.strip(),
+            "todo": todo.strip(),
+            "deadline": todo_date}
 
 
 def meeting_date(meta_date):
@@ -148,3 +150,10 @@ def meeting_date(meta_date):
     )
     formatted_date = dt.strftime("%Y-%m-%d")
     return formatted_date
+
+
+def is_link(line):
+    """Identify if a line of prose starts with a link."""
+    if line.startswith('https://') or line.startswith('http://'):
+        return True
+    return False
