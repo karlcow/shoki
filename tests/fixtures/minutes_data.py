@@ -37,7 +37,7 @@ minutes_data = {
                     "speaker": "hemingway",
                 },
             ],
-            "intro": "Then there was the bad weather. It would come in one day when the fall was over.",
+            "intro": "https://en.wikipedia.org/wiki/Ernest_Hemingway Then there was the bad weather. It would come in one day when the fall was over.",
         },
         {
             "topic": "Topic without owner",

@@ -81,7 +81,7 @@ def extract_prose(prose_block):
     firstline = True
     for line in prose_block:
         speaker, sep, text = line.partition(":")
-        if speaker.find(" ") == -1:
+        if speaker.find(" ") == -1 and not is_link(line):
             # We are in the speaker section.
             speaking = True
             continuation = False
