@@ -13,8 +13,10 @@ from shoki.parsing import extract_blocks
 from shoki.parsing import extract_prose
 from shoki.parsing import extract_todo
 from shoki.parsing import extract_topic
+from shoki.parsing import is_link
 from shoki.parsing import meeting_date
 from shoki.parsing import meta_headers
+
 
 FIXTURE_DIR = "./tests/fixtures/"
 
@@ -165,6 +167,12 @@ class TestShokiParsing(unittest.TestCase):
         self.assertIs(type(actual), dict)
         self.assertDictEqual(actual, expected)
 
+    def test_is_link(self):
+        """Test lines starting with http."""
+        self.assertTrue(is_link('https://example.com'))
+        self.assertTrue(is_link('http://example.com'))
+        self.assertFalse(is_link('julien: for example'))
+        self.assertFalse(is_link('http and everything'))
 
 if __name__ == "__main__":
     unittest.main()
