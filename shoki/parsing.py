@@ -22,12 +22,13 @@ def extract_blocks(text_minutes):
         if line.strip() == "" and headers:
             # we are entering the topics.
             headers = False
-        elif line.startswith(shoki_config.END):
+        elif line.startswith(shoki_config.default_config['end']):
             # we reached the end of the minutes section
             break
         elif not headers:
             # we are entering the minutes section
-            if new_topic and line.startswith(shoki_config.TOPIC_HEADER):
+            if new_topic and line.startswith(
+                    shoki_config.default_config['topic_header']):
                 # a topic line starts a block
                 new_topic = False
                 text_block = {"topic_line": line}
