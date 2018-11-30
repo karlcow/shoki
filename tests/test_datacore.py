@@ -9,7 +9,7 @@
 from unittest.mock import patch
 import unittest
 
-from fixtures import minutes_data
+from tests.fixtures import minutes_data
 from shoki import datacore
 
 FIXTURE_DIR = "./tests/fixtures/"
@@ -17,6 +17,13 @@ FIXTURE_DIR = "./tests/fixtures/"
 
 class TestShokiDatacore(unittest.TestCase):
     """Tests for the core data structure."""
+
+    test_config = {
+        'topic_header': '#',
+        'end': '--endtest--',
+        'output_format': 'webcompatwiki',
+        'topic_owner': '🔧'
+    }
 
     def setUp(self):
         """Set up tests."""
@@ -32,7 +39,7 @@ class TestShokiDatacore(unittest.TestCase):
             minutes_fixture = f.read()
         return minutes_fixture
 
-    @patch('shoki.datacore.shoki_config.END', '--endtest--')
+    @patch('shoki.datacore.shoki_config.default_config', test_config)
     def test_minutes_data(self):
         """Return the appropriate data structure."""
         actual = minutes_data.minutes_data
