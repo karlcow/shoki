@@ -24,11 +24,19 @@ FIXTURE_DIR = "./tests/fixtures/"
 class TestShokiParsing(unittest.TestCase):
     """Test the parsing rules for the minutes."""
 
+    test_config = {
+        'topic_header': '#',
+        'end': '--endtest--',
+        'output_format': 'webcompatwiki',
+        'topic_owner': '👹'
+    }
+
     def setUp(self):
         """Set up the tests."""
         self.minutes = self.read_minutes("minutes_normal.txt")
         self.minutes_basic = self.read_minutes("minutes_normal_no_cruft.txt")
         self.headers = meta_headers(self.minutes)
+        self.maxDiff = None
 
     def tearDown(self):
         """Tear down the tests."""
@@ -77,7 +85,7 @@ class TestShokiParsing(unittest.TestCase):
         self.assertIs(type(actual3), dict)
         self.assertDictEqual(actual3, expected3)
 
-    @patch('shoki.datacore.shoki_config.END', '--endtest--')
+    @patch('shoki.datacore.shoki_config.default_config', test_config)
     def test_minutes_blocks(self):
         """Extract minutes into blocks."""
         actual = extract_blocks(self.minutes_basic)
@@ -94,7 +102,7 @@ class TestShokiParsing(unittest.TestCase):
         self.assertIs(type(actual), list)
         self.assertListEqual(actual, expected)
 
-    @patch('shoki.datacore.shoki_config.END', '--endtest--')
+    @patch('shoki.datacore.shoki_config.default_config', test_config)
     def test_from_blocks_to_structure(self):
         """Extract the discussion structure from list of lines."""
         blocks = extract_blocks(self.minutes)

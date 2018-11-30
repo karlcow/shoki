@@ -7,16 +7,31 @@
 """Run the minutes."""
 
 import argparse
+import json
+import logging
+import pathlib
 import sys
 
 from shoki import datacore
+from shoki import shoki_config
 
 
+# APPLICATION MESSAGES
 USAGE = """Usage:
 shoki <command> [arg,[...]]
 commands:
 \tcreate
+\t\tWill create the minutes of your meeting
+\tinit
+\t\tWill create a config file the first time
 """
+CONFIG_EXIST = """User configuration already exists.
+You may manually edit the JSON file at:
+{loc}
+"""
+
+# LOGGING
+log = logging.getLogger(__name__)
 
 
 def create(args):
@@ -33,7 +48,9 @@ def create(args):
         help="Location of the minutes (file:// or http://)",
     )
     parser.add_argument(
-        "-t", "--test", metavar="", help="Create sample minutes using the test file"
+        "-t", "--test",
+        metavar="",
+        help="Create sample minutes using the test file"
     )
     parser.add_argument(
         "--out_format",
@@ -44,6 +61,26 @@ def create(args):
     )
     parsed_args = vars(parser.parse_args(args))
     return datacore.create_minutes(**parsed_args)
+
+
+def init():
+    """Initialize shoki project."""
+    user_config_file = shoki_config.USER_CONFIG_FILE
+    user_config_path = shoki_config.USER_CONFIG_PATH
+    if not pathlib.Path(user_config_file).exists():
+        user_config_path.mkdir(mode=0o700, parents=True, exist_ok=True)
+        log.debug('Created user config dir {dir}'.format(dir=user_config_path))
+        create_user_config(user_config_file)
+    else:
+        print(CONFIG_EXIST.format(loc=user_config_file))
+
+
+def create_user_config(user_config_file):
+    """Create a user config file."""
+    data = json.dumps(shoki_config.default_config,
+                      ensure_ascii=False, sort_keys=True, indent=4)
+    user_config_file.write_text(data)
+    log.info('Created new user config file')
 
 
 def main():
@@ -58,10 +95,11 @@ def main():
     if command == "create":
         content = create(args)
         print(content)
+    elif command == "init":
+        init()
     else:
         print(USAGE)
         sys.exit()
-
 
 if __name__ == "__main__":
     main()

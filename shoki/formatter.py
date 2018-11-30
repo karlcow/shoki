@@ -40,7 +40,8 @@ def convert(minutes_data, out_format):
             # Discussion title and owners
             owner = discussion["owner"]
             if not owner:
-                owner = " 🐝 "
+                owner = ' {owner} '.format(
+                    owner=shoki_config.default_config['topic_owner'])
             text += templates["topic"].substitute(
                 topic=discussion["topic"], owner=owner
             )

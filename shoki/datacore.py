@@ -34,7 +34,8 @@ def minutes_as_data(text):
     return minutes_data
 
 
-def create_minutes(location=shoki_config.LOCATION, out_format="webcompatwiki"):
+def create_minutes(location=shoki_config.MINUTES_LOCATION,
+                   out_format="webcompatwiki"):
     """Create Minutes."""
     minutes = ""
     with urllib.request.urlopen(location) as f:
