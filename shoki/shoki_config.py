@@ -6,20 +6,34 @@
 
 """Config elements for shoki."""
 
-import os
-from urllib.parse import urljoin
+import json
+import pathlib
 
 # Define the root of this directory
-ROOT = os.getcwd()
-# Parsing format
-# The characters used for marking up the title of a discussion
-TOPIC_HEADER = "#"
-# string to stop parsing
-END = """--end--"""
-# Default location for the minutes.
-# Can be a URL on the Web or a text file on the computer
-MINUTES_PATH = os.path.join(ROOT, "./tests/fixtures/minutes_normal.txt")
-LOCATION = urljoin("file://", MINUTES_PATH)
+ROOT = pathlib.Path.cwd()
+MINUTES_SAMPLE = './tests/fixtures/minutes_normal.txt'
+MINUTES_LOCATION = pathlib.Path(ROOT, MINUTES_SAMPLE).as_uri()
+
+# USER CONFIGURATION
+USER_PATH = pathlib.Path.home()
+USER_CONFIG_PATH = USER_PATH / '.shoki'
+CONFIG_NAME = 'shoki_config.json'
+USER_CONFIG_FILE = pathlib.Path(USER_CONFIG_PATH, CONFIG_NAME)
+
+if pathlib.Path(USER_CONFIG_FILE).exists():
+    # we use the local user configuration file
+    data = USER_CONFIG_FILE.read_text()
+    default_config = json.loads(data)
+else:
+    # use these defaults
+    default_config = {
+        'end': '--end--',
+        'output_format': 'webcompatwiki',
+        'topic_header': '#',
+        'topic_owner': '👹',
+    }
+
+# MESSAGES
 FORMAT_ERROR = """
 The formatter has failed.
 The file you are dealing with is probably in the wrong format.
