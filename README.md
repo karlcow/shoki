@@ -12,6 +12,7 @@ pip install shoki
 ```
 
 ## Usage
+
 ```bash
 shoki create --location [uri]
 ```
@@ -20,6 +21,7 @@ where `uri` is the location of the content served with a `Content-Type: text/mar
 
 
 ### Example
+
 ```bash
 shoki create --location https://webcompat-meet.herokuapp.com/0CMnUyYMSBaQJQ97Yxc8Ww/download
 ```
