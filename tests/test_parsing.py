@@ -35,6 +35,7 @@ class TestShokiParsing(unittest.TestCase):
         """Set up the tests."""
         self.minutes = self.read_minutes("minutes_normal.txt")
         self.minutes_basic = self.read_minutes("minutes_normal_no_cruft.txt")
+        self.minutes_yaml = self.read_minutes("minutes_yaml_header.txt")
         self.headers = meta_headers(self.minutes)
         self.maxDiff = None
 
@@ -61,6 +62,18 @@ class TestShokiParsing(unittest.TestCase):
     def test_meta_headers(self):
         """Return the dictionary for meeting metatada."""
         actual = meta_headers(self.minutes)
+        expected = {
+            "meeting": "Web Compatibility",
+            "date": "21 March 2017 - 6:00 PDT",
+            "minutes": "https://example.org/meetings/2017-03-21",
+            "scribe": "Aminata",
+        }
+        self.assertIs(type(actual), dict)
+        self.assertDictEqual(actual, expected)
+
+    def test_meta_yaml(self):
+        """Return the dictionary for meeting metatada with yaml header."""
+        actual = meta_headers(self.minutes_yaml)
         expected = {
             "meeting": "Web Compatibility",
             "date": "21 March 2017 - 6:00 PDT",

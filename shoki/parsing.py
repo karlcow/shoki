@@ -117,8 +117,11 @@ def meta_headers(text_minutes):
     - Returns a dictionary.
     """
     meta = {}
-    for line in text_minutes.split("\n"):
-        if line.strip() == "":
+    lines = text_minutes.split("\n")
+    if lines[0] == "---":
+        lines.pop(0)
+    for line in lines:
+        if line.strip() in ["", "---"]:
             break
         meta_key, meta_value = line.split(":", 1)
         meta[meta_key.strip().lower()] = meta_value.strip()
