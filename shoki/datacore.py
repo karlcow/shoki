@@ -28,14 +28,15 @@ def minutes_as_data(text):
     blocks = parsing.extract_blocks(text)
     for block in blocks:
         discussion = parsing.extract_topic(block["topic_line"])
-        discussion["discussion"], description = parsing.extract_prose(block["prose"])  # noqa
+        discussion["discussion"], description = parsing.extract_prose(
+            block["prose"]
+        )  # noqa
         discussion["intro"] = description
         minutes_data["record"].append(discussion)
     return minutes_data
 
 
-def create_minutes(location=shoki_config.MINUTES_LOCATION,
-                   out_format="webcompatwiki"):
+def create_minutes(location=shoki_config.MINUTES_LOCATION, out_format="webcompatwiki"):
     """Create Minutes."""
     minutes = ""
     with urllib.request.urlopen(location) as f:
