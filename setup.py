@@ -17,7 +17,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name='shoki',
-    version='2.0.0',
+    version='2.0.2',
     description='Generate minutes from a text file',
     long_description=README,
     long_description_content_type='text/markdown',
