@@ -11,13 +11,13 @@ import pathlib
 
 # Define the root of this directory
 ROOT = pathlib.Path.cwd()
-MINUTES_SAMPLE = './tests/fixtures/minutes_normal.txt'
+MINUTES_SAMPLE = "./tests/fixtures/minutes_normal.txt"
 MINUTES_LOCATION = pathlib.Path(ROOT, MINUTES_SAMPLE).as_uri()
 
 # USER CONFIGURATION
 USER_PATH = pathlib.Path.home()
-USER_CONFIG_PATH = USER_PATH / '.shoki'
-CONFIG_NAME = 'shoki_config.json'
+USER_CONFIG_PATH = USER_PATH / ".shoki"
+CONFIG_NAME = "shoki_config.json"
 USER_CONFIG_FILE = pathlib.Path(USER_CONFIG_PATH, CONFIG_NAME)
 
 if pathlib.Path(USER_CONFIG_FILE).exists():
@@ -27,10 +27,10 @@ if pathlib.Path(USER_CONFIG_FILE).exists():
 else:
     # use these defaults
     default_config = {
-        'end': '--end--',
-        'output_format': 'webcompatwiki',
-        'topic_header': '#',
-        'topic_owner': '👹',
+        "end": "--end--",
+        "output_format": "webcompatwiki",
+        "topic_header": "#",
+        "topic_owner": "👹",
     }
 
 # MESSAGES
