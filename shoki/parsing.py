@@ -22,13 +22,14 @@ def extract_blocks(text_minutes):
         if line.strip() == "" and headers:
             # we are entering the topics.
             headers = False
-        elif line.startswith(shoki_config.default_config['end']):
+        elif line.startswith(shoki_config.default_config["end"]):
             # we reached the end of the minutes section
             break
         elif not headers:
             # we are entering the minutes section
             if new_topic and line.startswith(
-                    shoki_config.default_config['topic_header']):
+                shoki_config.default_config["topic_header"]
+            ):
                 # a topic line starts a block
                 new_topic = False
                 text_block = {"topic_line": line}
@@ -134,9 +135,7 @@ def extract_todo(flag, text):
     owner, action_line = text.split(" to ", 1)
     todo = action_line.strip()[:-10]
     todo_date = action_line.strip()[-10:]
-    return {"owner": owner.strip(),
-            "todo": todo.strip(),
-            "deadline": todo_date}
+    return {"owner": owner.strip(), "todo": todo.strip(), "deadline": todo_date}
 
 
 def meeting_date(meta_date):
@@ -155,6 +154,6 @@ def meeting_date(meta_date):
 
 def is_link(line):
     """Identify if a line of prose starts with a link."""
-    if line.startswith('https://') or line.startswith('http://'):
+    if line.startswith("https://") or line.startswith("http://"):
         return True
     return False
