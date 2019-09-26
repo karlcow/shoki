@@ -10,6 +10,7 @@ import os
 from string import Template
 import sys
 
+from pkg_resources import resource_filename
 from shoki import shoki_config
 
 
@@ -78,7 +79,7 @@ def load_templates(out_format):
 
     If the output format doesn't exist. It returns None.
     """
-    templates_dir = os.path.join(shoki_config.ROOT, "shoki/templates/", out_format)
+    templates_dir = os.path.join(resource_filename('shoki', 'templates'), out_format)
     if os.path.isdir(templates_dir):
         t = {}
         for tmpl_name in os.listdir(templates_dir):
@@ -88,4 +89,6 @@ def load_templates(out_format):
                 tmpl = Template(f.read())
             t[tmpl_key] = tmpl
         return t
+    else:
+        print("{tmpldir} doesn't exist!".format(tmpldir=templates_dir))
     return None
