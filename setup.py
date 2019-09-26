@@ -17,7 +17,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name='shoki',
-    version='1.0.1',
+    version='2.0.0',
     description='Generate minutes from a text file',
     long_description=README,
     long_description_content_type='text/markdown',
@@ -29,7 +29,7 @@ setup(
         'License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
     packages=["shoki"],
     include_package_data=True,
