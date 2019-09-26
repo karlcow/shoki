@@ -7,6 +7,8 @@ shoki is a secretary in Japanese. This python program is here to help take a tex
 
 ## Install
 
+This is a python 3 program (replace pip by pip3 if your default install is python 2.*)
+
 ```bash
 pip install shoki
 ```

@@ -2,44 +2,59 @@
 
 1. Check for open issues or open a new issue. Be descriptive. Give examples.
 2. Fork the repository on GitHub.
-3. Make sure you always have the latest version of master before coding.
+```bash
+git clone git@github.com:[username]/shoki.git
+```
+replace the username with your github username.
+3. Install a virtual environment
+```bash
+cd shoki
+python3 -m venv env
+source env/bin/activate
+pip install -r requirements-dev.txt
+```
+4. Make sure you always have the latest version of master before coding.
 ```bash
 git checkout master
 git fetch upstream
 git merge upstream/master
 ```
-3. Create a branch with the issue number and the version of your branch. If it's about issue 69. Then your first attempt will be in a branch name '69/1'.
-
+5. Create a branch with the issue number and the version of your branch. If it's about issue 69. Then your first attempt will be in a branch name '69/1'.
 ```bash
 git checkout -b 69/1
 ```
-4. Try as much as possible to start with writing tests for the new feature.
-5. Once your feature is done. Push the branch to your repo and create a pull request against master on shoki repo.
-6. Ask @karlcow for review.
+6. Try as much as possible to start with writing tests for the new feature.
+7. Then run tests. See below.
+8. Once your feature is done. Push the branch to your repo and create a pull request against master on shoki repo.
+9.  Ask @karlcow for review.
 
 ## Running unittests
 
 ```bash
-nosetests -v
+pytest -v
 ```
 
 This will spill out (or more)
 
 ```
-Return the appropriate data structure. ... ok
-Returns the appropriate data structure. ... ok
-Todo lines are parsed correctly. ... ok
-Extract the discussion structure from list of lines. ... ok
-Test lines starting with http. ... ok
-Extract the meeting date. ... ok
-Return the dictionary for meeting metatada. ... ok
-Extract minutes into blocks. ... ok
-Extract the topic and owner of a discussion. ... ok
+================================================================= test session starts =================================================================
+platform darwin -- Python 3.7.4, pytest-5.1.3, py-1.8.0, pluggy-0.13.0 -- /Users/karl/code/shoki/env/bin/python3
+cachedir: .pytest_cache
+rootdir: /Users/karl/code/shoki
+collected 10 items
 
-----------------------------------------------------------------------
-Ran 9 tests in 0.050s
+tests/test_datacore.py::TestShokiDatacore::test_minutes_data PASSED                                                                             [ 10%]
+tests/test_formatter.py::TestShokiFormatter::test_convert_unknown_format PASSED                                                                 [ 20%]
+tests/test_parsing.py::TestShokiParsing::test_extract_todo PASSED                                                                               [ 30%]
+tests/test_parsing.py::TestShokiParsing::test_from_blocks_to_structure PASSED                                                                   [ 40%]
+tests/test_parsing.py::TestShokiParsing::test_is_link PASSED                                                                                    [ 50%]
+tests/test_parsing.py::TestShokiParsing::test_meeting_date PASSED                                                                               [ 60%]
+tests/test_parsing.py::TestShokiParsing::test_meta_headers PASSED                                                                               [ 70%]
+tests/test_parsing.py::TestShokiParsing::test_meta_yaml PASSED                                                                                  [ 80%]
+tests/test_parsing.py::TestShokiParsing::test_minutes_blocks PASSED                                                                             [ 90%]
+tests/test_parsing.py::TestShokiParsing::test_topic_owner PASSED                                                                                [100%]
 
-OK
+================================================================= 10 passed in 0.11s ==================================================================
 ```
 
 ## Testing your development locally
@@ -67,4 +82,3 @@ Then you can test with:
 ```bash
 shoki create
 ```
-
